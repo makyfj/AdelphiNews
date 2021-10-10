@@ -1,9 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
 
-adelphi_news_page = requests.get("https://www.adelphi.edu/news")
+adelphiNewsPage = requests.get("https://www.adelphi.edu/news")
 
-contents = adelphi_news_page.content
+contents = adelphiNewsPage.content
 
 soup = BeautifulSoup(contents, "html.parser")
-print(soup.prettify())
+# print(soup.prettify())
+
+pageTitle = soup.title
