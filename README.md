@@ -1,5 +1,14 @@
 # AdelphiNews - Scraper
 
+Make sure to install these packages in a virtual environment, otherwise it might break your python installation.
+
+Windows 
+[Python Virtual environment](https://docs.python.org/3/library/venv.html)
+
+If you are in a mac:
+[Mac installation virtual environment](https://sourabhbajaj.com/mac-setup/Python/virtualenv.html)
+
+
 ## Tools to be used to Get and Clean data
 - [Requests](https://docs.python-requests.org/en/master/user/quickstart/)
 - [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
@@ -26,6 +35,3 @@ soup = BeautifulSoup(contents, 'html.parser')
 soup.find_all('a')
 
 ```
-
-You might need to create a virtual environment to install these modules.
-[Python Virtual environment](https://docs.python.org/3/library/venv.html)
