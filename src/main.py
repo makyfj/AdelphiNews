@@ -10,8 +10,9 @@ soup = BeautifulSoup(contents, "html.parser")
 
 pageTitle = soup.title
 
+# retrieves the title of each article in the front page
 newsTitle = soup.find_all("span", "news_item_title_link_label")
 
-firstTitle = newsTitle[0]
-
-print(firstTitle)
+# prints the title of the article
+for title in newsTitle:
+    print(title.string)
