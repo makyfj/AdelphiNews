@@ -11,6 +11,8 @@ If you are in a mac:
 Once virtual environment installed:
 
 - source env/bin/activate
+- pip install beautifulsoup4
+- pip install requests
 
 You'll be working on the AdelphiNews Environment
 
