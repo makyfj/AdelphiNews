@@ -48,8 +48,3 @@ print(articles[0]["body"])
 with open("articles.json", 'w') as outfile:
     json.dump(articles, outfile)
     print("Done")
-# First article
-#for i in range(numberOfNews):
-#    print(f"Title: {articles[i][0]}")
-#    print(f"Date: {articles[i][1]}")
-#    print(f"Body: {articles[i][2]}")
