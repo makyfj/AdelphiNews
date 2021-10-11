@@ -1,4 +1,5 @@
 import requests
+import json
 from bs4 import BeautifulSoup
 
 adelphiNewsPage = requests.get("https://www.adelphi.edu/news")
@@ -33,14 +34,22 @@ for body in newsBody:
     bodies.append(body.p.string)
 
 # To store all articles, to access them easily
-articles = []
+articles = [] 
 
 for i in range(numberOfNews):
-     # articles[i].append({"title": titles[i], "date": dates[i], "body": bodies[i]})
-    articles.append([titles[i], dates[i], bodies[i]])
+    articles.append({"title": titles[i], "date": dates[i], "body": bodies[i]})
 
+# How to access the articles
+print(articles[0]["title"])
+print(articles[0]["date"])
+print(articles[0]["body"])
+
+
+with open("articles.json", 'w') as outfile:
+    json.dump(articles, outfile)
+    print("Done")
 # First article
-for i in range(1):
-    print(f"Title: {articles[i][0]}")
-    print(f"Date: {articles[i][1]}")
-    print(f"Body: {articles[i][2]}")
+#for i in range(numberOfNews):
+#    print(f"Title: {articles[i][0]}")
+#    print(f"Date: {articles[i][1]}")
+#    print(f"Body: {articles[i][2]}")
