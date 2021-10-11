@@ -37,7 +37,10 @@ articles = []
 
 for i in range(numberOfNews):
      # articles[i].append({"title": titles[i], "date": dates[i], "body": bodies[i]})
-    articles.append([titles[i], bodies[i], dates[i]])
+    articles.append([titles[i], dates[i], bodies[i]])
 
 # First article
-print(articles[0])
+for i in range(1):
+    print(f"Title: {articles[i][0]}")
+    print(f"Date: {articles[i][1]}")
+    print(f"Body: {articles[i][2]}")
