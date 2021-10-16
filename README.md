@@ -1,5 +1,9 @@
 # AdelphiNews - Scraper
 
+## How to use SDK for python
+
+[SDK Setup](https://developer.amazon.com/en-US/docs/alexa/alexa-skills-kit-sdk-for-python/develop-your-first-skill.html)
+
 ## How to download and install packages
 
 1. Create a folder in your desktop

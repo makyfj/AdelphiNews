@@ -95,3 +95,14 @@ class AllExceptionHandler(AbstractExceptionHandler):
 
 
 sb = SkillBuilder()
+
+sb.add_request_handler(LaunchRequestHandler())
+sb.add_request_handler(HelloWorldIntentHandler())
+sb.add_request_handler(HelpIntentHandler())
+sb.add_request_handler(CancelAndStopIntentHandler())
+sb.add_request_handler(SessionEndedRequestHandler())
+
+sb.add_exception_handler(AllExceptionHandler())
+
+# AWS Lambda
+handler = sb.lambda_handler()
