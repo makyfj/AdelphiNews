@@ -6,13 +6,16 @@
 # This sample is built using the handler classes approach in skill builder.
 import logging
 import ask_sdk_core.utils as ask_utils
+from ask_sdk_core.utils.predicate import is_request_type
+from ask_sdk_core.utils.predicate import is_intent_name
+from ask_sdk_core.utils.request_util import get_intent_name
 
 from ask_sdk_core.skill_builder import SkillBuilder
-from ask_sdk_core.dispatch_components import AbstractRequestHandler
-from ask_sdk_core.dispatch_components import AbstractExceptionHandler
+from ask_sdk_core.dispatch_components.request_components import AbstractRequestHandler
+from ask_sdk_core.dispatch_components.exception_components import AbstractExceptionHandler
 from ask_sdk_core.handler_input import HandlerInput
 
-from ask_sdk_model import Response
+from ask_sdk_model.response import Response
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -23,7 +26,7 @@ class LaunchRequestHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
 
-        return ask_utils.is_request_type("LaunchRequest")(handler_input)
+        return is_request_type("LaunchRequest")(handler_input)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
@@ -41,7 +44,7 @@ class HelloWorldIntentHandler(AbstractRequestHandler):
     """Handler for Hello World Intent."""
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return ask_utils.is_intent_name("HelloWorldIntent")(handler_input)
+        return is_intent_name("HelloWorldIntent")(handler_input)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
@@ -59,7 +62,7 @@ class HelpIntentHandler(AbstractRequestHandler):
     """Handler for Help Intent."""
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return ask_utils.is_intent_name("AMAZON.HelpIntent")(handler_input)
+        return is_intent_name("AMAZON.HelpIntent")(handler_input)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
@@ -77,8 +80,8 @@ class CancelOrStopIntentHandler(AbstractRequestHandler):
     """Single handler for Cancel and Stop Intent."""
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return (ask_utils.is_intent_name("AMAZON.CancelIntent")(handler_input) or
-                ask_utils.is_intent_name("AMAZON.StopIntent")(handler_input))
+        return (is_intent_name("AMAZON.CancelIntent")(handler_input) or
+                is_intent_name("AMAZON.StopIntent")(handler_input))
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
@@ -94,7 +97,7 @@ class FallbackIntentHandler(AbstractRequestHandler):
     """Single handler for Fallback Intent."""
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return ask_utils.is_intent_name("AMAZON.FallbackIntent")(handler_input)
+        return is_intent_name("AMAZON.FallbackIntent")(handler_input)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
@@ -108,7 +111,7 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
     """Handler for Session End."""
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return ask_utils.is_request_type("SessionEndedRequest")(handler_input)
+        return is_request_type("SessionEndedRequest")(handler_input)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
@@ -126,12 +129,12 @@ class IntentReflectorHandler(AbstractRequestHandler):
     """
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return ask_utils.is_request_type("IntentRequest")(handler_input)
+        return is_request_type("IntentRequest")(handler_input)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        intent_name = ask_utils.get_intent_name(handler_input)
-        speak_output = "You just triggered " + intent_name + "."
+        intent_name = get_intent_name(handler_input)
+        speak_output = (f"You just triggered {intent_name}.")
 
         return (
             handler_input.response_builder

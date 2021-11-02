@@ -19,7 +19,8 @@ def create_presigned_url(object_name):
     """
     s3_client = boto3.client('s3',
                              region_name=os.environ.get('S3_PERSISTENCE_REGION'),
-                             config=boto3.session.Config(signature_version='s3v4',s3={'addressing_style': 'path'}))
+                             # config=boto3.session.Config(signature_version='s3v4',s3={'addressing_style': 'path'}))
+                             config=boto3.client.Config(signature_version='s3v4',s3={'addressing_style': 'path'}))
     try:
         bucket_name = os.environ.get('S3_PERSISTENCE_BUCKET')
         response = s3_client.generate_presigned_url('get_object',
