@@ -3,13 +3,6 @@ import os
 import boto3
 from botocore.exceptions import ClientError
 
-s3 = boto3.client('s3')
-response = s3.list_buckets()
-
-# Ouput the bucket names
-print("Exisiting buckets")
-for bucket in response['Buckets']:
-    print(f'{bucket["Name"]}')
 
 def create_presigned_url(object_name):
     """Generate a presigned URL to share an S3 object with a capped expiration of 60 seconds
@@ -19,8 +12,7 @@ def create_presigned_url(object_name):
     """
     s3_client = boto3.client('s3',
                              region_name=os.environ.get('S3_PERSISTENCE_REGION'),
-                             # config=boto3.session.Config(signature_version='s3v4',s3={'addressing_style': 'path'}))
-                             config=boto3.client.Config(signature_version='s3v4',s3={'addressing_style': 'path'}))
+                             config=boto3.session.Config(signature_version='s3v4',s3={'addressing_style': 'path'}))
     try:
         bucket_name = os.environ.get('S3_PERSISTENCE_BUCKET')
         response = s3_client.generate_presigned_url('get_object',

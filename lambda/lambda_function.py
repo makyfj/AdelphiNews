@@ -6,16 +6,16 @@
 # This sample is built using the handler classes approach in skill builder.
 import logging
 import ask_sdk_core.utils as ask_utils
-from ask_sdk_core.utils.predicate import is_request_type
-from ask_sdk_core.utils.predicate import is_intent_name
-from ask_sdk_core.utils.request_util import get_intent_name
 
 from ask_sdk_core.skill_builder import SkillBuilder
-from ask_sdk_core.dispatch_components.request_components import AbstractRequestHandler
-from ask_sdk_core.dispatch_components.exception_components import AbstractExceptionHandler
+from ask_sdk_core.dispatch_components import AbstractRequestHandler
+from ask_sdk_core.dispatch_components import AbstractExceptionHandler
 from ask_sdk_core.handler_input import HandlerInput
 
-from ask_sdk_model.response import Response
+from ask_sdk_model import Response
+
+# custom modules
+import adelphi_news
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -26,12 +26,11 @@ class LaunchRequestHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
 
-        return is_request_type("LaunchRequest")(handler_input)
+        return ask_utils.is_request_type("LaunchRequest")(handler_input)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "Welcome, you can say Hello or Help. Which would you like to try?"
-
+        speak_output = "Welcome, you can say Recent Headlines or Help. Which would you like to try?"
         return (
             handler_input.response_builder
                 .speak(speak_output)
@@ -40,48 +39,87 @@ class LaunchRequestHandler(AbstractRequestHandler):
         )
 
 
-class HelloWorldIntentHandler(AbstractRequestHandler):
-    """Handler for Hello World Intent."""
+class RecentHeadlinesIntentHandler(AbstractRequestHandler):
+    """Hanlder for Recent Headlines Intent"""
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return is_intent_name("HelloWorldIntent")(handler_input)
-
+        return ask_utils.is_intent_name("RecentHeadlinesIntent")(handler_input)
+        
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "Hello World!"
-
-        return (
+        speak_output = "The most recent headlines are the followwing: \n"
+        
+        # Adelphi news lists with title, date, body and category
+        titles = adelphi_news.titles
+        
+        for i in range(4):
+            speak_output += titles[i] + ", "
+        
+        speak_output += "Which one would you like to hear?"
+        
+        
+        return(
             handler_input.response_builder
-                .speak(speak_output)
-                # .ask("add a reprompt if you want to keep the session open for the user to respond")
-                .response
+            .speak(speak_output)
+            .ask(speak_output)
+            .response
         )
 
+
+class TitleRequestIntentHandler(AbstractRequestHandler):
+    """Hanlder for Title Request Intent"""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return ask_utils.is_intent_name("TitleRequestIntent")(handler_input)
+    
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        slots = handler_input.request_envelope.request.intent.slots
+        title = slots["title"].value
+        
+        # articles = adelphi_news.articles
+        titles = adelphi_news.titles
+        bodies = adelphi_news.bodies
+        
+        for i in range(len(titles)):
+            if title in titles[i]:
+                speak_output = bodies[i]
+            else:
+                speak_output += bodies[i]
+        
+        return(
+            handler_input.response_builder
+            .speak(speak_output)
+            .ask(speak_output)
+            .response
+            )
 
 class HelpIntentHandler(AbstractRequestHandler):
     """Handler for Help Intent."""
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return is_intent_name("AMAZON.HelpIntent")(handler_input)
+        return ask_utils.is_intent_name("AMAZON.HelpIntent")(handler_input)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "You can say hello to me! How can I help?"
+        speak_output = "Here are the options:\n1. View recent headlines. \n2. See articles based on specific tags or attributes. \n3. Menu. \n4. Read. \n5. Stop. \n6. Continue. \n7. Exit."
 
         return (
             handler_input.response_builder
-                .speak(speak_output)
-                .ask(speak_output)
-                .response
+            .speak(speak_output)
+            .ask(speak_output)
+            .response
         )
+
+
 
 
 class CancelOrStopIntentHandler(AbstractRequestHandler):
     """Single handler for Cancel and Stop Intent."""
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return (is_intent_name("AMAZON.CancelIntent")(handler_input) or
-                is_intent_name("AMAZON.StopIntent")(handler_input))
+        return (ask_utils.is_intent_name("AMAZON.CancelIntent")(handler_input) or
+                ask_utils.is_intent_name("AMAZON.StopIntent")(handler_input))
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
@@ -97,7 +135,7 @@ class FallbackIntentHandler(AbstractRequestHandler):
     """Single handler for Fallback Intent."""
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return is_intent_name("AMAZON.FallbackIntent")(handler_input)
+        return ask_utils.is_intent_name("AMAZON.FallbackIntent")(handler_input)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
@@ -111,7 +149,7 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
     """Handler for Session End."""
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return is_request_type("SessionEndedRequest")(handler_input)
+        return ask_utils.is_request_type("SessionEndedRequest")(handler_input)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
@@ -129,12 +167,12 @@ class IntentReflectorHandler(AbstractRequestHandler):
     """
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return is_request_type("IntentRequest")(handler_input)
+        return ask_utils.is_request_type("IntentRequest")(handler_input)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        intent_name = get_intent_name(handler_input)
-        speak_output = (f"You just triggered {intent_name}.")
+        intent_name = ask_utils.get_intent_name(handler_input)
+        speak_output = "You just triggered " + intent_name + "."
 
         return (
             handler_input.response_builder
@@ -174,12 +212,18 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
 sb = SkillBuilder()
 
 sb.add_request_handler(LaunchRequestHandler())
-sb.add_request_handler(HelloWorldIntentHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(FallbackIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())
-sb.add_request_handler(IntentReflectorHandler()) # make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
+
+# Custom intents
+sb.add_request_handler(RecentHeadlinesIntentHandler())
+sb.add_request_handler(TitleRequestIntentHandler())
+
+# make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
+sb.add_request_handler(IntentReflectorHandler()) 
+
 
 sb.add_exception_handler(CatchAllExceptionHandler())
 

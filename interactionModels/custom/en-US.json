@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "change me",
+      "invocationName": "adelphi news",
       "intents": [
         {
           "name": "AMAZON.CancelIntent",
@@ -9,24 +9,16 @@
         },
         {
           "name": "AMAZON.HelpIntent",
-          "samples": []
+          "samples": [
+            "help",
+            "show menu",
+            "open menu options",
+            "display menu"
+          ]
         },
         {
           "name": "AMAZON.StopIntent",
           "samples": []
-        },
-        {
-          "name": "HelloWorldIntent",
-          "slots": [],
-          "samples": [
-            "hello",
-            "how are you",
-            "say hi world",
-            "say hi",
-            "hi",
-            "say hello world",
-            "say hello"
-          ]
         },
         {
           "name": "AMAZON.NavigateHomeIntent",
@@ -35,10 +27,169 @@
         {
           "name": "AMAZON.FallbackIntent",
           "samples": []
+        },
+        {
+          "name": "RecentHeadlinesIntent",
+          "slots": [],
+          "samples": [
+            "recent news",
+            "adelphi news headlines",
+            "headlines",
+            "recent headlines"
+          ]
+        },
+        {
+          "name": "TitleRequestIntent",
+          "slots": [
+            {
+              "name": "title",
+              "type": "catchAll"
+            }
+          ],
+          "samples": [
+            "{title}",
+            "read {title}"
+          ]
         }
       ],
-      "types": []
+      "types": [
+        {
+          "values": [
+            {
+              "name": {
+                "value": "allonymous"
+              }
+            },
+            {
+              "name": {
+                "value": "allonymous isoelectrically"
+              }
+            },
+            {
+              "name": {
+                "value": "allonymous isoelectrically salubrity"
+              }
+            },
+            {
+              "name": {
+                "value": "imbreviate Bertie arithmetical undramatically"
+              }
+            },
+            {
+              "name": {
+                "value": "mistakenness preinspire tourbillion caraguata chloremia"
+              }
+            },
+            {
+              "name": {
+                "value": "Cimbric sigillarid deconsecrate acceptableness balsamine anostosise"
+              }
+            },
+            {
+              "name": {
+                "value": "earsplitting mesoblastema outglow predeclare theriomorphism prereligious unarousing"
+              }
+            },
+            {
+              "name": {
+                "value": "earsplitting mesoblastema outglow predeclare theriomorphism prereligious unarousing asdx"
+              }
+            },
+            {
+              "name": {
+                "value": "ravinement pentameter proboscidate unexigent ringbone unnormal Entomophila perfectibilism asdf"
+              }
+            },
+            {
+              "name": {
+                "value": "defyingly amoralist toadship psoatic boyology unpartizan merlin nonskid asdfasdf asdf"
+              }
+            },
+            {
+              "name": {
+                "value": "broadax lifeboat progenitive betel ashkoko cleronomy unpresaging pneumonectomy asdf asdfasdf asdd"
+              }
+            },
+            {
+              "name": {
+                "value": "broadax lifeboat progenitive betel ashkoko cleronomy unpresaging pneumonectomy asdf asdfasdf asdd ssss"
+              }
+            },
+            {
+              "name": {
+                "value": "broadax lifeboat progenitive betel ashkoko cleronomy unpresaging pneumonectomy asdf asdfasdf asdd ssss ssss"
+              }
+            },
+            {
+              "name": {
+                "value": "overharshness filtrability visual predonate colisepsis unoccurring turbanlike flyboy"
+              }
+            },
+            {
+              "name": {
+                "value": "kilp Callicarpa unforsaken undergarment maxim cosenator archmugwump fitted"
+              }
+            },
+            {
+              "name": {
+                "value": "ungutted pontificially Oudenodon fossiled chess Unitarian bicone justice"
+              }
+            },
+            {
+              "name": {
+                "value": "compartmentalize prenotice achromat suitability molt stethograph Ricciaceae ultrafidianism"
+              }
+            },
+            {
+              "name": {
+                "value": "slotter archae contrastimulant sopper Serranus remarry pterygial atactic"
+              }
+            },
+            {
+              "name": {
+                "value": "superstrata shucking Umbrian hepatophlebotomy undreaded introspect doxographer tractility"
+              }
+            },
+            {
+              "name": {
+                "value": "obstructionist undethroned unlockable Lincolniana haggaday vindicatively tithebook"
+              }
+            },
+            {
+              "name": {
+                "value": "unsole relatively Atrebates Paramecium vestryish stockfish subpreceptor"
+              }
+            },
+            {
+              "name": {
+                "value": "babied vagueness elabrate graphophonic kalidium oligocholia floccus strang"
+              }
+            },
+            {
+              "name": {
+                "value": "undersight monotriglyphic uneffete trachycarpous albeit pardonableness Wade"
+              }
+            },
+            {
+              "name": {
+                "value": "minacious peroratory filibeg Kabirpanthi cyphella cattalo chaffy savanilla"
+              }
+            },
+            {
+              "name": {
+                "value": "Polyborinae Shakerlike checkerwork pentadecylic shopgirl herbary disanagrammatize shoad"
+              }
+            },
+            {
+              "name": {
+                "value": "Polyborinae Shakerlike checkerwork pentadecylic shopgirl herbary disanagrammatize shoad boom boom boom boom boom boom"
+              }
+            }
+          ],
+          "name": "catchAll"
+        }
+      ]
     }
   },
-  "version": "1"
+  "version": "18"
 }
