@@ -5,7 +5,9 @@
       "intents": [
         {
           "name": "AMAZON.CancelIntent",
-          "samples": []
+          "samples": [
+            "cancel"
+          ]
         },
         {
           "name": "AMAZON.HelpIntent",
@@ -18,7 +20,9 @@
         },
         {
           "name": "AMAZON.StopIntent",
-          "samples": []
+          "samples": [
+            "stop"
+          ]
         },
         {
           "name": "AMAZON.NavigateHomeIntent",
@@ -43,12 +47,26 @@
           "slots": [
             {
               "name": "title",
-              "type": "catchAll"
+              "type": "AMAZON.SearchQuery"
             }
           ],
           "samples": [
-            "{title}",
             "read {title}"
+          ]
+        },
+        {
+          "name": "ViewMoreHeadlinesIntent",
+          "slots": [],
+          "samples": [
+            "yes",
+            "view more headlines"
+          ]
+        },
+        {
+          "name": "ViewCategoriesIntent",
+          "slots": [],
+          "samples": [
+            "categories"
           ]
         }
       ],
@@ -191,5 +209,5 @@
       ]
     }
   },
-  "version": "18"
+  "version": "36"
 }

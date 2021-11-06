@@ -30,7 +30,7 @@ class LaunchRequestHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "Welcome, you can say Recent Headlines or Help. Which would you like to try?"
+        speak_output = "Welcome, to navigate adelphi news, use the following commands:\n1. recent headlines. \n2. articles by category. \n3. menu. \n4. read 'article title'. \n5. stop/cancel."
         return (
             handler_input.response_builder
                 .speak(speak_output)
@@ -47,7 +47,7 @@ class RecentHeadlinesIntentHandler(AbstractRequestHandler):
         
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "The most recent headlines are the followwing: \n"
+        speak_output = "The most recent headlines are the following: \n"
         
         # Adelphi news lists with title, date, body and category
         titles = adelphi_news.titles
@@ -55,8 +55,33 @@ class RecentHeadlinesIntentHandler(AbstractRequestHandler):
         for i in range(4):
             speak_output += titles[i] + ", "
         
-        speak_output += "Which one would you like to hear?"
+        speak_output += ". Would you like to see more articles?"
         
+        
+        return(
+            handler_input.response_builder
+            .speak(speak_output)
+            .ask(speak_output)
+            .response
+        )
+
+
+class ViewMoreHeadlinesIntentHandler(AbstractRequestHandler):
+    """Handler for View More Headlines"""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return ask_utils.is_intent_name("ViewMoreHeadlinesIntent")(handler_input)
+        
+    def handle(self, handler_input):
+        # type: (HanlderInput) -> Response
+        speak_output = "More headlines:\n"
+        
+        titles = adelphi_news.titles
+        
+        for i in range(5, 9):
+            speak_output += titles[i] + ", "
+        
+        speak_output += ". Which title would you like to read?"
         
         return(
             handler_input.response_builder
@@ -77,15 +102,17 @@ class TitleRequestIntentHandler(AbstractRequestHandler):
         slots = handler_input.request_envelope.request.intent.slots
         title = slots["title"].value
         
-        # articles = adelphi_news.articles
+        #articles = adelphi_news.articles
         titles = adelphi_news.titles
         bodies = adelphi_news.bodies
         
+        speak_output = ""
+        
         for i in range(len(titles)):
             if title in titles[i]:
-                speak_output = bodies[i]
+                speak_output = bodies[i] + ".\nWhat other article would you like to hear?"
             else:
-                speak_output += bodies[i]
+                speak_output = f"Sorry, we couldn't find {title}, try again"
         
         return(
             handler_input.response_builder
@@ -93,6 +120,33 @@ class TitleRequestIntentHandler(AbstractRequestHandler):
             .ask(speak_output)
             .response
             )
+
+
+class ViewCategoriesIntentHandler(AbstractRequestHandler):
+    """Handler for View Articles Categories Intent"""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return ask_utils.is_intent_name("ViewCategoriesIntent")(handler_input)
+        
+    def handle(self, handler_input):
+        # type: (HanlderInput) -> Response
+        speak_output = "The categories are the following: "
+        
+        unique_categories = adelphi_news.unique_categories
+        
+        for category in range(5):
+            speak_output += category + ", "
+
+
+        speak_output += ". Which category would you like to see?"
+        
+        return(
+            handler_input.response_builder
+            .speak(speak_output)
+            .ask(speak_output)
+            .response
+        )
+    
 
 class HelpIntentHandler(AbstractRequestHandler):
     """Handler for Help Intent."""
@@ -102,7 +156,7 @@ class HelpIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "Here are the options:\n1. View recent headlines. \n2. See articles based on specific tags or attributes. \n3. Menu. \n4. Read. \n5. Stop. \n6. Continue. \n7. Exit."
+        speak_output = "Here are the options:\n1. recent headlines. \n2. articles categories \n3. menu. \n4. read 'article title'. \n5. stop/cancel"
 
         return (
             handler_input.response_builder
@@ -123,7 +177,7 @@ class CancelOrStopIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "Goodbye!"
+        speak_output = "Closing adelphi news!, goodbye"
 
         return (
             handler_input.response_builder
@@ -220,6 +274,8 @@ sb.add_request_handler(SessionEndedRequestHandler())
 # Custom intents
 sb.add_request_handler(RecentHeadlinesIntentHandler())
 sb.add_request_handler(TitleRequestIntentHandler())
+sb.add_request_handler(ViewMoreHeadlinesIntentHandler())
+sb.add_request_handler(ViewCategoriesIntentHandler())
 
 # make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
 sb.add_request_handler(IntentReflectorHandler()) 

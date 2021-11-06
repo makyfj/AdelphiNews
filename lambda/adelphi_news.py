@@ -49,6 +49,8 @@ for category in news_category:
 # To store all articles, to access them easily
 articles = [] 
 
+unique_categories = set(val for dic in categories for val in dic.values())
+
 for i in range(number_of_news):
     articles.append({"title": titles[i],"category": categories[i] ,"date": dates[i], "body": bodies[i]})
 
