@@ -1,6 +1,6 @@
 import main as adelphi_news
 
-unique_c = adelphi_news.unique_categories
+categories = adelphi_news.all_unique_categories
 
-for x in unique_c:
+for x in categories:
     print(x)

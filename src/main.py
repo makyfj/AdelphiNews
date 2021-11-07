@@ -1,6 +1,7 @@
 import requests
 import json
 from bs4 import BeautifulSoup
+import numpy as np
 
 adelphi_news_page = requests.get("https://www.adelphi.edu/news")
 
@@ -31,23 +32,38 @@ bodies = []
 categories = []
 
 for title in news_title:
-    titles.append(title.string)
+    titles.append(title.string.lower())
 
 for date in news_publication_date:
-    dates.append(date.string)
+    dates.append(date.string.lower())
 
 for body in news_body:
-    bodies.append(body.p.string)
+    bodies.append(body.p.string.lower())
 
 
 for category in news_category:
     # for ul - news_item_category_list
     # categories.append({"category": [", ".join((category.text).strip("\n").split("\n\n\n"))]})
-    categories.append({"category": category.text.strip("\n")})
+    categories.append({"category": category.text.strip("\n").lower()})
 
 
 # To store all articles, to access them easily
 articles = [] 
+
+def unique_categories(list_categories):
+    unique = np.array(list_categories)
+    unique_category = np.unique(unique)
+    return unique_category
+
+all_categories = []
+
+for unique_category in news_category:
+    all_categories.append(unique_category.text.strip("\n"))
+
+all_unique_categories = unique_categories(all_categories) 
+
+# for i in all_unique_categories:
+#     print(i)
 
 for i in range(number_of_news):
      articles.append({"title": titles[i],"category": categories[i] ,"date": dates[i], "body": bodies[i]})
@@ -58,6 +74,6 @@ for i in range(number_of_news):
 # print(articles[0]["body"])
 
 
-with open("articles.json", 'w') as outfile:
-    json.dump(articles, outfile)
-    print("Adelphi news articles downloaded")
+# with open("articles.json", 'w') as outfile:
+#     json.dump(articles, outfile)
+#     print("Adelphi news articles downloaded")

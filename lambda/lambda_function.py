@@ -13,6 +13,7 @@ from ask_sdk_core.dispatch_components import AbstractExceptionHandler
 from ask_sdk_core.handler_input import HandlerInput
 
 from ask_sdk_model import Response
+import random as ran
 
 # custom modules
 import adelphi_news
@@ -30,7 +31,7 @@ class LaunchRequestHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "Welcome, to navigate adelphi news, use the following commands:\n1. recent headlines. \n2. articles by category. \n3. menu. \n4. read 'article title'. \n5. stop/cancel."
+        speak_output = "Welcome to Adelphi News, you can use the following commands:\n1. recent headlines. \n2. articles by category. \n3. menu. \n4. read 'article title'. \n5. stop/cancel."
         return (
             handler_input.response_builder
                 .speak(speak_output)
@@ -47,7 +48,7 @@ class RecentHeadlinesIntentHandler(AbstractRequestHandler):
         
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "The most recent headlines are the following: \n"
+        speak_output = "Here are the most recent headlines: \n"
         
         # Adelphi news lists with title, date, body and category
         titles = adelphi_news.titles
@@ -55,7 +56,7 @@ class RecentHeadlinesIntentHandler(AbstractRequestHandler):
         for i in range(4):
             speak_output += titles[i] + ", "
         
-        speak_output += ". Would you like to see more articles?"
+        speak_output += ". Would you like to see more headlines?"
         
         
         return(
@@ -74,14 +75,14 @@ class ViewMoreHeadlinesIntentHandler(AbstractRequestHandler):
         
     def handle(self, handler_input):
         # type: (HanlderInput) -> Response
-        speak_output = "More headlines:\n"
+        speak_output = "Here are more headlines:\n"
         
         titles = adelphi_news.titles
         
         for i in range(5, 9):
             speak_output += titles[i] + ", "
         
-        speak_output += ". Which title would you like to read?"
+        speak_output += ". Which article would you like me to read? - You can say 'read \"article\"'"
         
         return(
             handler_input.response_builder
@@ -129,16 +130,15 @@ class ViewCategoriesIntentHandler(AbstractRequestHandler):
         return ask_utils.is_intent_name("ViewCategoriesIntent")(handler_input)
         
     def handle(self, handler_input):
-        # type: (HanlderInput) -> Response
-        speak_output = "The categories are the following: "
+        # type: (HandlerInput) -> Response
+        speak_output = "Here are the categories: "
         
-        unique_categories = adelphi_news.unique_categories
+        unique_categories = adelphi_news.all_unique_categories
         
-        for category in range(5):
-            speak_output += category + ", "
+        for i in range(5):
+            speak_output += unique_categories[i] + ", "
 
-
-        speak_output += ". Which category would you like to see?"
+        speak_output += ". Which category would you like to see the articles for?"
         
         return(
             handler_input.response_builder
@@ -146,7 +146,37 @@ class ViewCategoriesIntentHandler(AbstractRequestHandler):
             .ask(speak_output)
             .response
         )
-    
+
+class ViewTitleByCategoryIntentHandler(AbstractRequestHandler):
+    """Handler for View Title By Category Intent"""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return ask_utils.is_intent_name("ViewTitleByCategoryIntent")(handler_input)
+        
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+         # type: (HandlerInput) -> Response
+        slots = handler_input.request_envelope.request.intent.slots
+        category = slots["category"].value
+        
+        articles = adelphi_news.articles
+        
+        speak_output = "Here are the titles: "
+        
+        for i in range(len(articles)):
+            if category == articles[i]['category']['category']:
+                speak_output += articles[i]['title'] + ", "
+        
+        speak_output += articles[6]['title'] + ", " + articles[9]['title']
+        
+        speak_output += ". Which one would you like to read?"
+        
+        return (
+            handler_input.response_builder
+            .speak(speak_output)
+            .ask(speak_output)
+            .response
+        )
 
 class HelpIntentHandler(AbstractRequestHandler):
     """Handler for Help Intent."""
@@ -156,7 +186,7 @@ class HelpIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "Here are the options:\n1. recent headlines. \n2. articles categories \n3. menu. \n4. read 'article title'. \n5. stop/cancel"
+        speak_output = "Here are the options:\n1. recent headlines. \n2. articles by category. \n3. menu. \n4. read 'article title'. \n5. stop/cancel"
 
         return (
             handler_input.response_builder
@@ -194,10 +224,10 @@ class FallbackIntentHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("In FallbackIntentHandler")
-        speech = "Hmm, I'm not sure. You can say Hello or Help. What would you like to do?"
-        reprompt = "I didn't catch that. What can I help you with?"
+        speech = "Invalid command."
+        speech += " Here are the commands:\n1. recent headlines. \n2. articles by category. \n3. menu. \n4. read 'article title'. \n5. stop/cancel"
 
-        return handler_input.response_builder.speak(speech).ask(reprompt).response
+        return handler_input.response_builder.speak(speech).ask(speech).response
 
 class SessionEndedRequestHandler(AbstractRequestHandler):
     """Handler for Session End."""
@@ -276,6 +306,7 @@ sb.add_request_handler(RecentHeadlinesIntentHandler())
 sb.add_request_handler(TitleRequestIntentHandler())
 sb.add_request_handler(ViewMoreHeadlinesIntentHandler())
 sb.add_request_handler(ViewCategoriesIntentHandler())
+sb.add_request_handler(ViewTitleByCategoryIntentHandler())
 
 # make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
 sb.add_request_handler(IntentReflectorHandler()) 

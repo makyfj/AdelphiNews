@@ -1,6 +1,7 @@
 import requests
 import json
 from bs4 import BeautifulSoup
+import numpy as np
 
 adelphi_news_page = requests.get("https://www.adelphi.edu/news")
 
@@ -49,7 +50,17 @@ for category in news_category:
 # To store all articles, to access them easily
 articles = [] 
 
-unique_categories = set(val for dic in categories for val in dic.values())
+def unique_categories(list_categories):
+    unique = np.array(list_categories)
+    unique_category = np.unique(unique)
+    return unique_category
+
+all_categories = []
+
+for unique_category in news_category:
+    all_categories.append(unique_category.text.strip("\n"))
+
+all_unique_categories = unique_categories(all_categories) 
 
 for i in range(number_of_news):
     articles.append({"title": titles[i],"category": categories[i] ,"date": dates[i], "body": bodies[i]})
